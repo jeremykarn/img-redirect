@@ -9,12 +9,28 @@ app.get('/', function(req, res) {
 });
 
 var uri = 'http://en.wikipedia.org/w/api.php?action=query&list=allimages&ailimit=5&aifrom=#{id}&aiprop=url&format=json';
-app.get('/search/:search', function(req, res) {
-  var search_query = req.params.search;
-  request({uri: uri.replace('#{id}', search_query)}, function(err, response, body){
+
+var imdb_uri = 'http://www.omdbapi.com/?t=#{title}&y=#{year}'
+
+
+
+app.get('/search/:title', function(req, res) {
+  var title_query = encodeURIComponent(req.params.title);
+  console.log(title_query);
+
+  //var year_query = encodeURIComponent(req.params.year);
+  //console.log(year_query);
+
+  //imdb_uri = imdb_uri.replace('#{title}', title_query).replace('#{year}', year_query)
+  //console.log(imdb_uri);
+
+  uri = 'http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=' + title_query + '&safe=active';
+  console.log(uri);
+
+  request({uri: uri}, function(err, response, body){
     // start writing your custom code!
     var parsed_body = JSON.parse(body);
-    url = parsed_body["query"]["allimages"][0]["url"];
+    url = parsed_body['responseData']['results'][0]['unescapedUrl'];
     console.log(url);
     res.redirect(url);
   });
