@@ -13,6 +13,11 @@ var uri = 'http://en.wikipedia.org/w/api.php?action=query&list=allimages&ailimit
 var imdb_uri = 'http://www.omdbapi.com/?t=#{title}&y=#{year}'
 
 
+process.on('uncaughtException', function (exception) {
+  console.log("Error");
+  console.log(exception);
+});
+
 
 app.get('/search/:title', function(req, res) {
   var title_query = encodeURIComponent(req.params.title);
@@ -39,3 +44,4 @@ app.get('/search/:title', function(req, res) {
 
 app.listen('8888');
 console.log('Server running on port 8888');
+
